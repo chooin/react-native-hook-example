@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import {
   useAppActive,
   useAppInactive,
@@ -10,12 +10,17 @@ import {
   useUnload,
 } from 'react-native-lifecycle';
 import {Hoc} from '../../../components';
+import {useEventEmitter, usePageGesture} from 'react-native-hook';
 
 const Index = () => {
+  const eventEmitter = useEventEmitter('goBack');
   // Called when the application from background to foreground
   useAppActive(() => {
     console.log('User useAppActive');
   });
+  // const pageGesture = usePageGesture({
+  //   enabled: false,
+  // });
 
   // Called when the application from foreground to background
   useAppInactive(() => {
@@ -50,6 +55,7 @@ const Index = () => {
   return (
     <View>
       <Text>/user/index</Text>
+      <Button onPress={() => eventEmitter.emit('xxx')} title="goBack" />
     </View>
   );
 };

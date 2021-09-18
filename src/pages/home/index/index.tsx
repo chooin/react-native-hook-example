@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Pressable, Text} from 'react-native';
+import {View, Pressable, Text, Button} from 'react-native';
 import {
   useAppActive,
   useAppInactive,
@@ -10,9 +10,18 @@ import {
   useResize,
 } from 'react-native-lifecycle';
 import {useNavigation} from '@react-navigation/native';
+import {useEventEmitter, usePageInterval, usePermissions} from 'react-native-hook';
+import {PERMISSIONS} from "react-native-permissions";
 
 export default () => {
   const navigation = useNavigation();
+  useEventEmitter('goBack', e => {
+    navigation.goBack();
+    console.log('xxx', e);
+  });
+  const pageInterval = usePageInterval(() => {
+    console.log('usePageInterval');
+  }, 3 * 1000);
 
   const onClick = () => {
     navigation.navigate('/user/index');
@@ -53,10 +62,15 @@ export default () => {
     console.log('Home useResize');
   });
 
+  const onStopInterval = () => {
+    pageInterval.setEnabled(false);
+  };
+
   return (
     <View>
       <Pressable onPress={onClick}>
         <Text>home/index</Text>
+        <Button title="stopInterval" onPress={onStopInterval} />
       </Pressable>
     </View>
   );
